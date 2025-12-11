@@ -30,7 +30,7 @@ function Intro({ onStart }: IntroProps) {
         Seu controle de glicemia inteligente, simples e conectado.
       </p>
 
-      {/* Botão Premium */}
+      {/* Botão Começar */}
       <button
         onClick={onStart}
         className="w-full max-w-xs bg-white text-blue-700 font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
@@ -44,7 +44,7 @@ function Intro({ onStart }: IntroProps) {
 
       {/* Rodapé Discreto */}
       <div className="absolute bottom-6 text-blue-300 text-xs">
-        Versão 1.0.0
+        Versão 1.1.0
       </div>
     </div>
   );
