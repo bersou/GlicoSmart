@@ -22,7 +22,7 @@ export const analyzeReading = (value: number): GlucoseAnalysis => {
             color: "text-emerald-700",
             bgColor: "bg-emerald-50",
             borderColor: "border-emerald-200",
-            message: "Ótimo! Sua glicemia está dentro do esperado."
+            message: "Ótimo! Glicemia está dentro do esperado." // Alterado aqui
         };
     } else if (numValue >= 145 && numValue <= 200) {
         return {
