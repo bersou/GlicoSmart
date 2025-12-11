@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, ArcElement } from 'chart.js';
-import { Trash2, Plus, X, Camera, LogOut, Activity, Pencil, Check, History, Upload, User, Calendar, Weight } from 'lucide-react';
+import { Trash2, Plus, X, Camera, LogOut, Activity, Pencil, Check, History, Upload, User, Calendar, Weight, Settings } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import StatsCard from './StatsCard';
@@ -328,9 +328,18 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
             <h2 className="text-2xl font-black text-slate-800 tracking-tight leading-none">{userProfile.name}</h2>
           </div>
         </div>
-        <button onClick={handleLogout} className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all active:scale-95">
-          <LogOut size={20} />
-        </button>
+        <div className="flex gap-2">
+            <button 
+                onClick={openProfileEdit} 
+                className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-slate-400 hover:text-blue-500 hover:bg-blue-50 transition-all active:scale-95"
+                title="Editar Perfil"
+            >
+                <Settings size={20} />
+            </button>
+            <button onClick={handleLogout} className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all active:scale-95">
+                <LogOut size={20} />
+            </button>
+        </div>
       </div>
 
       {/* Photo Edit Modal */}
@@ -436,36 +445,6 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
           </div>
         </div>
       )}
-
-      {/* Profile Info Card */}
-      <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-slate-700 text-lg">Seus Dados</h3>
-          <button 
-            onClick={openProfileEdit}
-            className="p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition-all"
-          >
-            <Pencil size={18} />
-          </button>
-        </div>
-        
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-slate-50 rounded-xl p-3 text-center">
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nome</p>
-            <p className="font-bold text-slate-800 truncate">{userProfile.name}</p>
-          </div>
-          
-          <div className="bg-slate-50 rounded-xl p-3 text-center">
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Idade</p>
-            <p className="font-bold text-slate-800">{userProfile.age} anos</p>
-          </div>
-          
-          <div className="bg-slate-50 rounded-xl p-3 text-center">
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Peso</p>
-            <p className="font-bold text-slate-800">{userProfile.weight} kg</p>
-          </div>
-        </div>
-      </div>
 
       {/* Main Stats Card */}
       <div className="mb-8 transform hover:scale-[1.02] transition-transform duration-300">

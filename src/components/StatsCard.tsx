@@ -1,6 +1,6 @@
 import React from 'react';
-import { analyzeReading } from '../utils/glucoseLogic'; // Updated import
-import { ThumbsUp, AlertTriangle, Activity } from 'lucide-react';
+import { analyzeReading } from '../utils/glucoseLogic';
+import { ThumbsUp, AlertTriangle, Activity, Share2 } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -36,6 +36,27 @@ export default function StatsCard({ latestReading }: StatsCardProps) {
     if (analysis.status === 'Normal') StatusIcon = ThumbsUp;
     if (analysis.status === 'Alerta' || analysis.status === 'Hipoglicemia' || analysis.status === 'Hiperglicemia') StatusIcon = AlertTriangle;
 
+    const handleShare = async () => {
+        const shareText = `Minha última leitura de glicemia no GlicoSmart: ${latestReading.value} mg/dL - ${analysis.status}! ${analysis.message} #GlicoSmart`;
+        const shareUrl = window.location.origin; // Or a specific URL if available
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'GlicoSmart - Minha Leitura de Glicemia',
+                    text: shareText,
+                    url: shareUrl,
+                });
+                console.log('Conteúdo compartilhado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao compartilhar:', error);
+            }
+        } else {
+            // Fallback for browsers that don't support Web Share API
+            alert(`Compartilhe sua leitura:\n\n${shareText}\n\n${shareUrl}\n\n(Copie e cole manualmente)`);
+        }
+    };
+
     return (
         <div className={`relative overflow-hidden rounded-[2rem] p-6 shadow-xl transition-all duration-500 ${analysis.bgColor.replace('bg-', 'bg-opacity-40 ')} border ${analysis.borderColor}`}>
             {/* Background decoration */}
@@ -50,8 +71,17 @@ export default function StatsCard({ latestReading }: StatsCardProps) {
                             <span className="text-xs font-medium text-slate-400 first-letter:uppercase">{timeAgo}</span>
                         </div>
                     </div>
-                    <div className={`p-2 rounded-full ${analysis.bgColor.replace('50', '200')} ${analysis.color}`}>
-                        <StatusIcon size={20} />
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleShare}
+                            className={`p-2 rounded-full ${analysis.bgColor.replace('50', '200')} ${analysis.color} hover:bg-opacity-60 transition-all active:scale-95`}
+                            title="Compartilhar Leitura"
+                        >
+                            <Share2 size={20} />
+                        </button>
+                        <div className={`p-2 rounded-full ${analysis.bgColor.replace('50', '200')} ${analysis.color}`}>
+                            <StatusIcon size={20} />
+                        </div>
                     </div>
                 </div>
 
