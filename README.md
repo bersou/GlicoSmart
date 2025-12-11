@@ -45,11 +45,13 @@
 - Estatísticas gerais (média, mínima, máxima)
 - Gráfico de tendências dos últimos 7 dias
 - Gráfico de distribuição (normal, baixo, alto)
+- **Novo:** Botão de configurações para editar seu perfil (nome, idade, peso, foto).
+- **Novo:** Opção de compartilhar a última leitura de glicemia diretamente do card.
 
 ### 📝 Registro de Medições
 - Adicionar novas leituras com valor, período e notas
 - Definir data e hora manualmente (útil para backdate)
-- Editar ou excluir medições existentes
+- **Melhoria:** Editar ou excluir medições existentes diretamente no histórico.
 - Ordenação automática por timestamp
 
 ### 🤖 Nutri AI - Assistente Virtual Inteligente
@@ -74,12 +76,18 @@ O chatbot oferece orientações sobre:
 - Cadastro com nome, idade, peso e foto
 - Avatar personalizado com iniciais no chat
 - Cálculos personalizados (ex: hidratação baseada no peso)
+- **Melhoria:** Edição de perfil acessível via ícone de engrenagem no Dashboard.
 
 ### 📱 PWA (Progressive Web App)
 - Instalável no celular e desktop
 - Funciona offline
 - Ícones e splash screen personalizados
 - Experiência nativa
+
+### 📜 Histórico e Exportação
+- Visualização detalhada de todas as medições.
+- Filtros por data e período.
+- **Novo:** Opção de baixar o histórico de medições em formato Excel (.xlsx) com as colunas: Valor, Período, Data, Horário e Status. (Nota: A inclusão de gráficos e formatação condicional avançada diretamente no arquivo Excel gerado no navegador possui limitações técnicas e não está implementada).
 
 ---
 
@@ -90,6 +98,7 @@ O chatbot oferece orientações sobre:
 - **Vite 5.0** - Build tool ultrarrápido
 - **TailwindCSS 3.4** - Framework CSS utilitário
 - **Lucide React** - Ícones modernos
+- **TypeScript** - Linguagem de programação para maior segurança e escalabilidade (todos os novos arquivos são em `.tsx`)
 
 ### Gráficos & Visualização
 - **Chart.js 4.4** - Biblioteca de gráficos
@@ -103,6 +112,7 @@ O chatbot oferece orientações sobre:
 ### Utilitários
 - **clsx** - Utilitário para classes condicionais
 - **tailwind-merge** - Merge de classes Tailwind
+- **xlsx** - Para exportação de dados para Excel
 
 ---
 
@@ -157,6 +167,17 @@ Antes de começar, você precisa ter instalado:
 5. (Opcional) Adicione notas sobre a medição
 6. Clique em **"Salvar Registro"**
 
+### Editando Perfil
+
+1. No Dashboard, clique no ícone de **engrenagem** no canto superior direito.
+2. Edite seu nome, idade, peso ou foto.
+3. Clique em "Salvar" para aplicar as mudanças.
+
+### Compartilhando a Última Leitura
+
+1. No Dashboard, no card da "Última Leitura", clique no ícone de **compartilhamento** (seta para cima).
+2. Escolha a plataforma para compartilhar sua leitura.
+
 ### Usando o Nutri AI
 
 1. Clique no botão **"Nutri AI"** no canto inferior direito
@@ -172,9 +193,11 @@ Antes de começar, você precisa ter instalado:
 
 ### Visualizando Histórico
 
-1. Navegue até a aba **"Histórico"**
-2. Veja todas as suas medições ordenadas por data
-3. Clique em uma medição para editar ou excluir
+1. Navegue até a aba **"Histórico"** na barra de navegação inferior.
+2. Veja todas as suas medições ordenadas por data.
+3. Clique em uma medição para editar ou excluir.
+4. Use os filtros de data e período para refinar a visualização.
+5. Clique no ícone de **download** para exportar o histórico para Excel.
 
 ---
 
@@ -226,16 +249,27 @@ glicosmart/
 │   └── manifest.json   # Manifesto PWA
 ├── src/
 │   ├── components/     # Componentes React
-│   │   ├── AIChat.jsx          # Chatbot Nutri AI
-│   │   ├── Dashboard.jsx       # Painel principal
-│   │   ├── Onboarding.jsx      # Tela de cadastro
-│   │   ├── Intro.jsx           # Tela de introdução
-│   │   ├── StatsCard.jsx       # Cards de estatísticas
+│   │   ├── AIChat.tsx          # Chatbot Nutri AI
+│   │   ├── BottomNavigationBar.tsx # Barra de navegação inferior
+│   │   ├── Dashboard.tsx       # Painel principal
+│   │   ├── ErrorBoundary.tsx   # Componente de tratamento de erros
+│   │   ├── Intro.tsx           # Tela de introdução
+│   │   ├── Login.tsx           # Componente de login
+│   │   ├── Onboarding.tsx      # Tela de cadastro
+│   │   ├── StatsCard.tsx       # Cards de estatísticas
 │   │   └── ...
 │   ├── hooks/          # Custom hooks
-│   │   └── useAppStore.js      # Gerenciamento de estado
-│   ├── App.jsx         # Componente raiz
-│   ├── main.jsx        # Entry point
+│   │   ├── useAppStore.ts      # Gerenciamento de estado
+│   │   └── useGlucoseData.ts   # Hook de dados de glicose (legado)
+│   ├── pages/          # Páginas da aplicação
+│   │   ├── HealthTipsPage.tsx  # Página de dicas de saúde
+│   │   ├── HistoryPage.tsx     # Página de histórico de medições
+│   │   └── StatisticsPage.tsx  # Página de estatísticas
+│   ├── utils/          # Funções utilitárias
+│   │   ├── glucoseLogic.ts     # Lógica de análise de glicose
+│   │   └── healthTipsData.ts   # Dados para dicas de saúde
+│   ├── App.tsx         # Componente raiz com roteamento
+│   ├── main.tsx        # Entry point
 │   └── index.css       # Estilos globais
 ├── package.json        # Dependências
 ├── vite.config.js      # Configuração Vite
