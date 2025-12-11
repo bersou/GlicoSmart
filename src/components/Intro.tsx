@@ -44,7 +44,7 @@ function Intro({ onStart }: IntroProps) {
 
       {/* Rodapé Discreto */}
       <div className="absolute bottom-6 text-blue-300 text-xs">
-        Versão 1.1.0
+        Versão 1.2.0
       </div>
     </div>
   );
