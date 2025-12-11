@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, ArcElement } from 'chart.js';
-import { Trash2, Plus, X, Camera, LogOut, Activity, Pencil, Check, History, Upload } from 'lucide-react';
+import { Trash2, Plus, X, Camera, LogOut, Activity, Pencil, Check, History, Upload, User, Calendar, Weight } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import StatsCard from './StatsCard';
@@ -46,6 +46,12 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
   const [time, setTime] = useState<string>('');
   const [showPhotoEdit, setShowPhotoEdit] = useState<boolean>(false);
   const [newPhoto, setNewPhoto] = useState<string | null>(null);
+  const [showProfileEdit, setShowProfileEdit] = useState<boolean>(false);
+  const [profileData, setProfileData] = useState({
+    name: userProfile.name,
+    age: userProfile.age,
+    weight: userProfile.weight
+  });
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,6 +177,33 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
   const cancelPhotoEdit = () => {
     setShowPhotoEdit(false);
     setNewPhoto(null);
+  };
+
+  const openProfileEdit = () => {
+    setProfileData({
+      name: userProfile.name,
+      age: userProfile.age,
+      weight: userProfile.weight
+    });
+    setShowProfileEdit(true);
+  };
+
+  const saveProfile = () => {
+    updateProfile({
+      name: profileData.name,
+      age: profileData.age,
+      weight: profileData.weight
+    });
+    setShowProfileEdit(false);
+  };
+
+  const cancelProfileEdit = () => {
+    setShowProfileEdit(false);
+    setProfileData({
+      name: userProfile.name,
+      age: userProfile.age,
+      weight: userProfile.weight
+    });
   };
 
   const lastReading = readings[0];
@@ -333,6 +366,106 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
           </div>
         </div>
       )}
+
+      {/* Profile Edit Modal */}
+      {showProfileEdit && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+            <h3 className="font-bold text-lg mb-4">Editar Perfil</h3>
+            
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nome</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input
+                    type="text"
+                    value={profileData.name}
+                    onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold text-slate-700"
+                    placeholder="Seu nome"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Idade</label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <input
+                      type="number"
+                      value={profileData.age}
+                      onChange={(e) => setProfileData({...profileData, age: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold text-slate-700"
+                      placeholder="00"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Peso (kg)</label>
+                  <div className="relative">
+                    <Weight className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <input
+                      type="number"
+                      value={profileData.weight}
+                      onChange={(e) => setProfileData({...profileData, weight: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold text-slate-700"
+                      placeholder="00.0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <button 
+                onClick={cancelProfileEdit}
+                className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={saveProfile}
+                className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile Info Card */}
+      <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-bold text-slate-700 text-lg">Seus Dados</h3>
+          <button 
+            onClick={openProfileEdit}
+            className="p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition-all"
+          >
+            <Pencil size={18} />
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-slate-50 rounded-xl p-3 text-center">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nome</p>
+            <p className="font-bold text-slate-800 truncate">{userProfile.name}</p>
+          </div>
+          
+          <div className="bg-slate-50 rounded-xl p-3 text-center">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Idade</p>
+            <p className="font-bold text-slate-800">{userProfile.age} anos</p>
+          </div>
+          
+          <div className="bg-slate-50 rounded-xl p-3 text-center">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Peso</p>
+            <p className="font-bold text-slate-800">{userProfile.weight} kg</p>
+          </div>
+        </div>
+      </div>
 
       {/* Main Stats Card */}
       <div className="mb-8 transform hover:scale-[1.02] transition-transform duration-300">
