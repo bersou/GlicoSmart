@@ -37,7 +37,16 @@ export default function StatsCard({ latestReading }: StatsCardProps) {
     if (analysis.status === 'Alerta' || analysis.status === 'Hipoglicemia' || analysis.status === 'Hiperglicemia') StatusIcon = AlertTriangle;
 
     const handleShare = async () => {
-        const shareText = `Minha última leitura de glicemia no GlicoSmart: ${latestReading.value} mg/dL - ${analysis.status}! ${analysis.message} #GlicoSmart`;
+        let emoji = '';
+        if (analysis.status === 'Normal') {
+            emoji = '🟢';
+        } else if (analysis.status === 'Alerta') {
+            emoji = '🟡';
+        } else { // Hipoglicemia or Hiperglicemia
+            emoji = '🔴';
+        }
+
+        const shareText = `${latestReading.value} mg/dL - ${analysis.status}! ${emoji} ${analysis.message} #GlicoSmart`;
         const shareUrl = window.location.origin; // Or a specific URL if available
 
         if (navigator.share) {
