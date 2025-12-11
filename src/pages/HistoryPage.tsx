@@ -65,7 +65,6 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
                 Data: format(parseISO(r.timestamp), "dd/MM/yyyy", { locale: ptBR }),
                 Horario: format(parseISO(r.timestamp), "HH:mm", { locale: ptBR }),
                 Status: analysis.status,
-                Mensagem: analysis.message // Use the analysis message here
             };
         });
 
@@ -111,7 +110,7 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
                 fill: true,
                 data: chartReadings.map(r => r.value),
                 borderColor: 'rgb(16, 185, 129)',
-                backgroundColor: (context) => {
+                backgroundColor: (context: any) => {
                     const ctx = context.chart.ctx;
                     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
                     gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
@@ -139,8 +138,8 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
                 cornerRadius: 8,
                 displayColors: false,
                 callbacks: {
-                    label: (ctx) => `${ctx.raw} mg/dL`,
-                    title: (ctx) => ctx[0].label
+                    label: (ctx: any) => `${ctx.raw} mg/dL`,
+                    title: (ctx: any) => ctx[0].label
                 }
             }
         },
@@ -303,7 +302,7 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
                                             cornerRadius: 8,
                                             displayColors: true,
                                             callbacks: {
-                                                label: (context) => {
+                                                label: (context: any) => {
                                                     const label = context.label || '';
                                                     const value = context.raw || 0;
                                                     return ` ${label}: ${value}`;
