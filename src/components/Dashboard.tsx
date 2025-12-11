@@ -36,6 +36,17 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
+// Helper function to map analysis color to hex for Chart.js
+const getPointColor = (value: number) => {
+  const analysis = analyzeReading(value);
+  switch (analysis.color) {
+    case 'text-red-700': return '#ef4444'; // Red-500
+    case 'text-emerald-700': return '#10b981'; // Emerald-500
+    case 'text-orange-700': return '#f97316'; // Orange-500
+    default: return '#64748b'; // Slate-500 (default)
+  }
+};
+
 export default function Dashboard({ userProfile, readings, addReading, updateReading, deleteReading, onLogout }: DashboardProps) {
   const { updateProfile } = useAppStore();
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -225,8 +236,8 @@ export default function Dashboard({ userProfile, readings, addReading, updateRea
           return gradient;
         },
         tension: 0.4,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: 'rgb(16, 185, 129)',
+        pointBackgroundColor: chartReadings.map(r => getPointColor(r.value)), // Dynamic color
+        pointBorderColor: chartReadings.map(r => getPointColor(r.value)), // Dynamic color
         pointBorderWidth: 2,
         pointRadius: 4,
         pointHoverRadius: 6,

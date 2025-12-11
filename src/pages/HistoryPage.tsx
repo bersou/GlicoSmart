@@ -26,6 +26,17 @@ interface HistoryPageProps {
     updateReading: (id: string, newValues: Partial<Reading>) => void;
 }
 
+// Helper function to map analysis color to hex for Chart.js
+const getPointColor = (value: number) => {
+  const analysis = analyzeReading(value);
+  switch (analysis.color) {
+    case 'text-red-700': return '#ef4444'; // Red-500
+    case 'text-emerald-700': return '#10b981'; // Emerald-500
+    case 'text-orange-700': return '#f97316'; // Orange-500
+    default: return '#64748b'; // Slate-500 (default)
+  }
+};
+
 export default function HistoryPage({ readings, deleteReading, updateReading }: HistoryPageProps) {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -118,8 +129,8 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
                     return gradient;
                 },
                 tension: 0.4,
-                pointBackgroundColor: '#fff',
-                pointBorderColor: 'rgb(16, 185, 129)',
+                pointBackgroundColor: chartReadings.map(r => getPointColor(r.value)), // Dynamic color
+                pointBorderColor: chartReadings.map(r => getPointColor(r.value)), // Dynamic color
                 pointBorderWidth: 2,
                 pointRadius: 4,
                 pointHoverRadius: 6,
@@ -161,7 +172,8 @@ export default function HistoryPage({ readings, deleteReading, updateReading }: 
     filteredReadings.forEach(r => {
         if (r.value < 70) counts.low++;
         else if (r.value <= 144) counts.normal++;
-        else counts.high++;
+        else if (r.value >= 145 && r.value <= 200) counts.high++; // Adjusted to match analyzeReading 'Alerta'
+        else counts.high++; // For 'Hiperglicemia'
     });
 
     const doughnutData = {
